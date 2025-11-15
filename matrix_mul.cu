@@ -43,7 +43,7 @@ void verify_result(int *a, int *b, int *c, int N) {
   }
 }
 
-int main() {
+int mat_mul_main() {
   // setting the matrix size
   // 1 << 10 is is a bitwise left shift (for example number 5 is 101, shift to
   // the left 5 times and you get 10100000)
