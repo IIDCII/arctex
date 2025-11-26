@@ -1,0 +1,17 @@
+services:
+  cuda-service:
+    build: .                # build from Dockerfile in this directory
+    image: cuda-with-cmake  # optional name for the built image
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        source: .
+        target: /workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
