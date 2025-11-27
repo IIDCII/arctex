@@ -1,0 +1,34 @@
+# Ignore .env with local settings
+.env
+
+# Docker build artifacts
+docker-configs/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Neovim state files (just in case)
+.cache/
+.local/
+.swap/
+.swp
+.swo
+
+# Backup and lock files
+*.bak
+*.tmp
+*.lock
+
+# VSCode or JetBrains project files
+.vscode/
+.idea/
+
+# macOS and Linux system files
+.DS_Store
+Thumbs.db
+
+# Volume data (in case using volume mounts with actual paths)
+nvim-data/
+nvim-cache/
