@@ -3,29 +3,39 @@ project(CudaExploration LANGUAGES CXX CUDA)
 
 set(CMAKE_CUDA_ARCHITECTURES 61)
 set(CMAKE_CUDA_STANDARD 20)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-find_path(CUNIT_INCLUDE_DIR NAMES CUnit/Basic.h)
-find_library(CUNIT_LIBRARY NAMES cunit)
-
-if(NOT CUNIT_INCLUDE_DIR OR NOT CUNIT_LIBRARY)
-  message(FATAL_ERROR "CUnit not found")
-endif()
 
 add_library(CudaLib
-    src/Matrix.cuh
-    src/synchronous_functions/synchronous_functions.cuh
-    src/matrix_mul.cu
+  src/Matrix.h
+  src/synchronous_functions/matrix_utilities.hh
+  src/synchronous_functions/add.hh
+  src/synchronous_functions/subtract.hh
+  src/matrix_mul.cu
 )
 
 set_target_properties(CudaLib PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 target_include_directories(CudaLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(Tests
-        tests/tests.cu
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
 
-target_link_libraries(Tests PRIVATE CudaLib ${CUNIT_LIBRARY})
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
-target_include_directories(Tests PRIVATE ${CUNIT_INCLUDE_DIR})
+enable_testing()
+
+add_executable(Tests
+  tests/test_synchronous_addition.cc
+  tests/test_synchronous_subtraction.cc
+  tests/test_synchronous_matrix_utilities.cc
+)
+target_link_libraries(Tests
+  GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(Tests)

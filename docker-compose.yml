@@ -1,13 +1,29 @@
 services:
-  cuda-service:
-    build: .                # build from Dockerfile in this directory
-    image: cuda-with-cmake  # optional name for the built image
-    stdin_open: true
-    tty: true
+  cuda-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER_ID: ${USER_ID}
+        GROUP_ID: ${GROUP_ID}
+        USERNAME: ${USERNAME}
+    image: ${PROJECT_NAME:-cuda-project}-dev
+    container_name: ${PROJECT_NAME:-cuda-project}-container
+    user: ${USER_ID}:${GROUP_ID}
     volumes:
-      - type: bind
-        source: .
-        target: /workspace
+      - ${PROJECT_DIR}:/workspace
+      - nvim-data:/home/${USERNAME}/.local/share/nvim
+      - nvim-cache:/home/${USERNAME}/.cache/nvim
+      # X11 for clipboard support
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${HOME}/.Xauthority:/home/${USERNAME}/.Xauthority:ro
+    environment:
+      - DISPLAY=${DISPLAY}
+      - HOME=/home/${USERNAME}
+    working_dir: /workspace
+    command: /bin/bash
+    tty: true
+    stdin_open: true
     deploy:
       resources:
         reservations:
@@ -15,3 +31,7 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+
+volumes:
+  nvim-data:
+  nvim-cache:
