@@ -34,15 +34,11 @@ TEST_F(SynchronousAdditionTest, AddZeroMatrices) {
   fillMatrix(matrixB, zero);
   fillMatrix(expected, zero);
 
-  std::cout << "here" << std::endl;
-
   Matrix<int> *result = synchronousAddition(matrixA, matrixB);
-  std::cout << "there" << std::endl;
   bool isEqual = matrixEqual(result, expected);
   EXPECT_TRUE(isEqual);
 
   freeMatrix(result);
-  std::cout << "everywhere" << std::endl;
 }
 
 TEST_F(SynchronousAdditionTest, AddOneMatrices) {
@@ -120,9 +116,7 @@ TEST_F(SynchronousAdditionTest, ThrowErrorOnDifferentColumnDimension) {
   Matrix<int> *nonSquareA = allocateMatrix<int>(rows, 10);
   Matrix<int> *nonSquareB = allocateMatrix<int>(rows, 5);
 
-  auto errorStatement = [&]() -> void {
-    auto matrixThatNeverArrives = synchronousAddition(nonSquareA, nonSquareB);
-  };
+  auto errorStatement = [&]() -> void { auto matrixThatNeverArrives = synchronousAddition(nonSquareA, nonSquareB); };
   EXPECT_THROW(errorStatement(), exception);
 
   freeMatrix(nonSquareA);
@@ -134,9 +128,7 @@ TEST_F(SynchronousAdditionTest, ThrowErrorOnDifferentRowDimension) {
   Matrix<int> *nonSquareA = allocateMatrix<int>(10, columns);
   Matrix<int> *nonSquareB = allocateMatrix<int>(5, columns);
 
-  auto errorStatement = [&]() -> void {
-    auto matrixThatNeverArrives = synchronousAddition(nonSquareA, nonSquareB);
-  };
+  auto errorStatement = [&]() -> void { auto matrixThatNeverArrives = synchronousAddition(nonSquareA, nonSquareB); };
   EXPECT_THROW(errorStatement(), exception);
 
   freeMatrix(nonSquareA);
