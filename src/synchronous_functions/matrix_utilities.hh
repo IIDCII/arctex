@@ -2,13 +2,20 @@
 #define CUDAEXPLORATION_BASIC_FUNCTIONS_CUH
 
 #include "../Matrix.h"
+#include <cstddef>
 #include <cstdlib>
+#include <iostream>
+#include <ostream>
+#include <sstream>
 
 template <typename T>
 void fillMatrix(Matrix<T> *matrix, T value);
 
 template <typename T>
 bool dimensionsEqual(const Matrix<T> *matrix1, const Matrix<T> *matrix2);
+
+template <typename T>
+bool isMultiplicableDimensions(const Matrix<T> *matrix1, const Matrix<T> *matrix2);
 
 template <typename T>
 bool matrixEqual(const Matrix<T> *matrix1, const Matrix<T> *matrix2);
@@ -20,6 +27,30 @@ template <typename T>
 bool isMatrixFilled(Matrix<T> *matrix, T value);
 
 template <typename T>
+std::string matrixToString(Matrix<T> *matrix);
+
+template <typename T>
+void printMatrix(Matrix<T> *matrix);
+
+template <typename T>
+std::string matrixToString(Matrix<T> *matrix) {
+  std::stringstream stringStream;
+  size_t index = 0;
+  for (unsigned int row = 0; row < matrix->rows; row++) {
+    for (unsigned int column = 0; column < matrix->columns; column++, index++) {
+      stringStream << matrix->values[index] << ' ';
+    }
+    stringStream << '\n';
+  }
+  return stringStream.str();
+}
+
+template <typename T>
+void printMatrix(Matrix<T> *matrix) {
+  std::cout << matrixToString(matrix) << std::endl;
+}
+
+template <typename T>
 void fillMatrix(Matrix<T> *matrix, T value) {
   for (size_t i = 0; i < matrix->rows * matrix->columns; i++) {
     matrix->values[i] = value;
@@ -29,6 +60,11 @@ void fillMatrix(Matrix<T> *matrix, T value) {
 template <typename T>
 bool dimensionsEqual(const Matrix<T> *matrix1, const Matrix<T> *matrix2) {
   return matrix1->rows == matrix2->rows && matrix1->columns == matrix2->columns;
+}
+
+template <typename T>
+bool isMultiplicableDimensions(const Matrix<T> *matrix1, const Matrix<T> *matrix2) {
+  return matrix1->columns == matrix2->rows;
 }
 
 namespace {

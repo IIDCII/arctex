@@ -17,6 +17,10 @@ protected:
     matrixB = allocateMatrix<int>(rows, columns);
     matrixC = allocateMatrix<int>(rows, columns);
     expected = allocateMatrix<int>(rows, columns);
+    fillMatrix(matrixA, 0);
+    fillMatrix(matrixB, 0);
+    fillMatrix(matrixC, 0);
+    fillMatrix(expected, 0);
   }
 
   void TearDown() override {
@@ -103,9 +107,7 @@ TEST_F(SynchronousSubtractionTest, ThrowErrorOnDifferentColumnDimension) {
   Matrix<int> *nonSquareA = allocateMatrix<int>(rows, 10);
   Matrix<int> *nonSquareB = allocateMatrix<int>(rows, 5);
 
-  auto errorStatement = [&]() -> void {
-    auto matrixThatNeverArrives = synchronousSubtraction(nonSquareA, nonSquareB);
-  };
+  auto errorStatement = [&]() -> void { auto matrixThatNeverArrives = synchronousSubtraction(nonSquareA, nonSquareB); };
   EXPECT_THROW(errorStatement(), exception);
 
   freeMatrix(nonSquareA);
@@ -117,9 +119,7 @@ TEST_F(SynchronousSubtractionTest, ThrowErrorOnDifferentRowDimension) {
   Matrix<int> *nonSquareA = allocateMatrix<int>(10, columns);
   Matrix<int> *nonSquareB = allocateMatrix<int>(5, columns);
 
-  auto errorStatement = [&]() -> void {
-    auto matrixThatNeverArrives = synchronousSubtraction(nonSquareA, nonSquareB);
-  };
+  auto errorStatement = [&]() -> void { auto matrixThatNeverArrives = synchronousSubtraction(nonSquareA, nonSquareB); };
   EXPECT_THROW(errorStatement(), exception);
 
   freeMatrix(nonSquareA);

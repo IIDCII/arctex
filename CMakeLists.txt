@@ -3,12 +3,14 @@ project(CudaExploration LANGUAGES CXX CUDA)
 
 set(CMAKE_CUDA_ARCHITECTURES 61)
 set(CMAKE_CUDA_STANDARD 20)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_library(CudaLib
   src/Matrix.h
   src/synchronous_functions/matrix_utilities.hh
   src/synchronous_functions/add.hh
   src/synchronous_functions/subtract.hh
+  src/synchronous_functions/multiply.hh
+  src/synchronous_functions/divide.hh
   src/matrix_mul.cu
 )
 
@@ -31,8 +33,12 @@ enable_testing()
 add_executable(Tests
   tests/test_synchronous_addition.cc
   tests/test_synchronous_subtraction.cc
+  tests/test_synchronous_division.cc
+  tests/test_synchronous_multiplication.cc
+  tests/test_synchronous_matrix_multiplication.cc
   tests/test_synchronous_matrix_utilities.cc
 )
+
 target_link_libraries(Tests
   GTest::gtest_main
 )
